@@ -1,27 +1,25 @@
 (ns automat.stream
-  #+clj
-  (:import
-    [java.nio
-     Buffer
-     ByteBuffer
-     ShortBuffer
-     IntBuffer
-     LongBuffer]
-    [automat.utils
-     Wrappers$InputStreamWrapper
-     Wrappers$ReaderWrapper
-     Wrappers$ByteBufferWrapper
-     Wrappers$ShortBufferWrapper
-     Wrappers$IntBufferWrapper
-     Wrappers$LongBufferWrapper
-     InputStream]))
+  #?(:clj (:import
+           [java.nio
+            Buffer
+            ByteBuffer
+            ShortBuffer
+            IntBuffer
+            LongBuffer]
+           [automat.utils
+            Wrappers$InputStreamWrapper
+            Wrappers$ReaderWrapper
+            Wrappers$ByteBufferWrapper
+            Wrappers$ShortBufferWrapper
+            Wrappers$IntBufferWrapper
+            Wrappers$LongBufferWrapper
+            InputStream])))
 
-#+clj (def ^:const byte-array-class (class (byte-array 0)))
-#+clj (def ^:const short-array-class (class (short-array 0)))
-#+clj (def ^:const int-array-class (class (int-array 0)))
-#+clj (def ^:const long-array-class (class (long-array 0)))
-
-#+clj
+#?(:clj (def ^:const byte-array-class (class (byte-array 0))))
+#?(:clj (def ^:const short-array-class (class (short-array 0))))
+#?(:clj (def ^:const int-array-class (class (int-array 0))))
+#?(:clj (def ^:const long-array-class (class (long-array 0))))
+#?(:clj
 (defn ^InputStream to-stream [x]
   (condp instance? x
 
@@ -76,13 +74,13 @@
                   x
                   #_ (if (char? x)
                     (int x)
-                    x))))))))))
+                    x)))))))))))
 
-#+cljs
+#?(:+cljs
 (defprotocol InputStream
-  (nextInput [_ eof]))
+  (nextInput [_ eof])))
 
-#+cljs
+#?(:cljs
 (defn to-stream [x]
   (if (satisfies? InputStream x)
     x
@@ -95,7 +93,7 @@
              eof
              (let [x (first s')]
                (vswap! s rest)
-               x))))))))
+               x)))))))))
 
 (defn next-input [^InputStream stream eof]
-  (#+clj .nextInput #+cljs nextInput stream eof))
+  (#?(:clj .nextInput :cljs nextInput) stream eof))

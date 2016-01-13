@@ -1,21 +1,24 @@
 (ns automat.core
   (:refer-clojure :exclude [concat compile find range .. * + or and not complement])
-  (:require
-   [automat.compiler.base :as base]
-   [automat.compiler.core :as core :refer [#+cljs CompiledAutomatonState]]
-   [automat.fsm :as fsm]
-   [automat.stream :as stream]
-   [clojure.set :as set]
-   #+clj [automat.compiler.eval :as eval]
-   #+clj [potemkin]
-   #+clj [clojure.core :as clj]
-   #+cljs [cljs.core :as clj :include-macros true])
-  #+clj
-  (:import
-   [automat.compiler.core
-    CompiledAutomatonState]))
-
-;;;
+  #?(:clj  (:require
+            [automat.compiler.base :as base]
+            [automat.compiler.core :as core]
+            [automat.fsm :as fsm]
+            [automat.stream :as stream]
+            [clojure.set :as set]
+            [automat.compiler.eval :as eval]
+            [potemkin]
+            [clojure.core :as clj])
+     :cljs (:require
+            [automat.compiler.base :as base]
+            [automat.compiler.core :as core :refer [CompiledAutomatonState]]
+            [automat.fsm :as fsm]
+            [automat.stream :as stream]
+            [clojure.set :as set]
+            [cljs.core :as clj :include-macros true]))
+  #?(:clj  (:import
+            [automat.compiler.core
+             CompiledAutomatonState])))
 
 (defn $
   "Defines a state tag, which can be correlated to a reducer function using `compile`."
@@ -57,7 +60,7 @@
   (if (clj/and (number? lower) (number? upper))
     (apply fsm/automaton (clj/range lower (inc upper)))
     (throw
-     (#+clj IllegalArgumentException. #+cljs js/Error.
+     (#?(:clj IllegalArgumentException. :cljs js/Error.)
       (str
        "Don't know how to create a range from '"
        (pr-str lower) "' to '" (pr-str upper) "'")))))
@@ -98,7 +101,7 @@
       (if (clj/or (.-accepted? state) (.-checkpoint state))
         (let [state' (advance-stream fsm state stream ::reject)]
           (cond
-            (#+clj identical? #+cljs keyword-identical? ::reject state')
+            (#?(:clj identical? :cljs keyword-identical?) ::reject state')
             (if (.-accepted? state)
               state
               (.-checkpoint state))
@@ -120,17 +123,18 @@
    If a `reject-value` is specified, it will be returned if an invalid input is given.  Otherwise an IllegalArgumentException is thrown."
   ([fsm state input]
      (let [state' (advance fsm state input ::reject)]
-       (if (#+clj identical? #+cljs keyword-identical? ::reject state')
+       (if (#?(:clj identical? :cljs keyword-identical?) ::reject state')
          (throw
-           (#+clj IllegalArgumentException. #+cljs js/Error.
+          (#?(:clj IllegalArgumentException. :cljs js/Error.)
              (str "could not process input " (pr-str input))))
          state')))
   ([fsm state input reject-value]
      (let [state (core/->automaton-state fsm state)]
        (advance-stream fsm state [input] reject-value))))
 
-#+clj (potemkin/import-fn core/precompile)
-#+cljs (def precompile core/precompile) ; TODO: port potemkin to cljs ;)
+#?(:clj  (potemkin/import-fn core/precompile)
+   :cljs (def precompile core/precompile)) ; TODO: port potemkin to cljs ;)
+
 
 (defn compile
   "Compiles the fsm into something that can be used with `find`, `advance-stream`, `greedy-find`, and `advance`.  Optionally takes an option map, which may contain:
@@ -151,11 +155,10 @@
                  fsm)
            backend (clj/or
                     backend
-                    #+clj (when (-> fsm core/states count (< 30)) :eval)
+                    #?(:clj (when (-> fsm core/states count (< 30)) :eval))
                     :base)]
        ((case backend
-          #+clj #+clj
-          :eval eval/compile
+          #?(:clj :eval eval/compile)
           :base base/compile)
         fsm options)))))
 
