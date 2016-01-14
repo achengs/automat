@@ -39,13 +39,12 @@
        (= generation (.-generation x))
        (= descriptor (.-descriptor x))
        (= sub-states (.-sub-states x))))))
-  #?(:cljs
-     IHash
-     (-hash [_]
-            (+
-             (hash generation)
-             (hash descriptor)
-             (hash sub-states)))))
+  #?(:cljs IHash)
+  #?(:cljs (-hash [_]
+                  (+
+                   (hash generation)
+                   (hash descriptor)
+                   (hash sub-states)))))
 
 (defn- assoc-action [^State s action]
   (State.
