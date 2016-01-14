@@ -12,8 +12,8 @@
                                   [criterium "0.4.3"]
                                   [codox-md "0.2.0" :exclusions [org.clojure/clojure]]]
                    :auto-clean false
-                   :aliases {"clean-test" ["do" "clean," "cljx" "once," "test," "cljsbuild" "test"]
-                             "clean-build" ["do" "clean," "cljx" "once," "cljsbuild" "once"]}}}
+                   :aliases {"clean-test" ["do" "clean," "test," "cljsbuild" "test"]
+                             "clean-build" ["do" "clean," "cljsbuild" "once"]}}}
   :test-selectors {:default #(every? (complement #{:stress :benchmark}) (keys %))
                    :stress :stress
                    :benchmark :benchmark}
