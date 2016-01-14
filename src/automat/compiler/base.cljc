@@ -4,7 +4,7 @@
                                                              CompiledAutomatonState]]
                      [automat.fsm :as fsm]
                      [automat.stream :as stream])
-     :clj (:require  [automat.compiler.core]
+     :clj (:require  [automat.compiler.core :as core]
                      [automat.fsm :as fsm]
                      [automat.stream :as stream]))
   #?(:clj (:import   [automat.compiler.core
