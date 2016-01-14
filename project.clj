@@ -2,13 +2,13 @@
   :description ""
   :license {:name "MIT License"
             :url "http://opensource.org/licenses/MIT"}
-  :dependencies [[rhizome "0.2.1"]
+  :dependencies [[rhizome "0.2.5"]
                  [primitive-math "0.1.4"]
-                 [potemkin "0.3.9"]
-                 [proteus "0.1.4"]]
+                 [potemkin "0.4.3"]
+                 [proteus "0.1.6"]]
   :profiles {:dev {:dependencies [[org.clojure/clojure "1.7.0"]
                                   [org.clojure/clojurescript "1.7.228"]
-                                  [org.clojure/test.check "0.5.9"]
+                                  [org.clojure/test.check "0.9.0"]
                                   [criterium "0.4.3"]
                                   [codox-md "0.2.0" :exclusions [org.clojure/clojure]]]
                    :auto-clean false
@@ -23,7 +23,7 @@
   :jar-exclusions [#"\.cljx|\.DS_Store"]
   :source-paths ["src" "target/src" "target/classes"]
   :test-paths ["test" "target/test"]
-  :plugins [[codox "0.6.4"]
+  :plugins [[codox "0.9.1"]
             [com.cemerick/clojurescript.test "0.3.3"]
             [lein-cljsbuild "1.1.2"]]
   :cljsbuild {:builds [{:source-paths ["src" "test"]
