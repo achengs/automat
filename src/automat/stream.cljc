@@ -76,7 +76,7 @@
                     (int x)
                     x)))))))))))
 
-#?(:+cljs
+#?(:cljs
 (defprotocol InputStream
   (nextInput [_ eof])))
 
