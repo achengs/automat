@@ -158,7 +158,7 @@
                     #?(:clj (when (-> fsm core/states count (< 30)) :eval))
                     :base)]
        ((case backend
-          #?(:clj :eval eval/compile)
+          #?@(:clj (:eval eval/compile))
           :base base/compile)
         fsm options)))))
 
