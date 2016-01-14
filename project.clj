@@ -41,7 +41,7 @@
                   {:source-paths ["test"]
                    :output-path "target/test"
                    :rules :cljs}]}
-  :cljsbuild {:builds [{:source-paths ["src" "target/src" "test" "target/test"]
+  :cljsbuild {:builds [{:source-paths ["src" "test" "target/test"]
                         :compiler {:output-to "target/test.js"
                                    :source-map "target/test.js.map"
                                    :output-dir "target/js"
