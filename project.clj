@@ -11,9 +11,10 @@
                                   [org.clojure/test.check "0.9.0"]
                                   [criterium "0.4.3"]
                                   [codox-md "0.2.0" :exclusions [org.clojure/clojure]]]
+                   :prep-tasks [["cljx" "once"] "javac" "compile"]
                    :auto-clean false
-                   :aliases {"clean-test" ["do" "clean," "test," "cljsbuild" "test"]
-                             "clean-build" ["do" "clean," "cljsbuild" "once"]}}}
+                   :aliases {"clean-test" ["do" "clean," "cljx" "once," "test," "cljsbuild" "test"]
+                             "clean-build" ["do" "clean," "cljx" "once," "cljsbuild" "once"]}}}
   :test-selectors {:default #(every? (complement #{:stress :benchmark}) (keys %))
                    :stress :stress
                    :benchmark :benchmark}
@@ -25,7 +26,20 @@
   :test-paths ["test" "target/test"]
   :plugins [[codox "0.9.1"]
             [com.cemerick/clojurescript.test "0.3.3"]
+            [com.keminglabs/cljx "0.5.0"]
             [lein-cljsbuild "1.1.2"]]
+  :cljx {:builds [{:source-paths ["src"]
+                   :output-path "target/src"
+                   :rules :clj}
+                  {:source-paths ["src"]
+                   :output-path "target/src"
+                   :rules :cljs}
+                  {:source-paths ["test"]
+                   :output-path "target/test"
+                   :rules :clj}
+                  {:source-paths ["test"]
+                   :output-path "target/test"
+                   :rules :cljs}]}
   :cljsbuild {:builds [{:source-paths ["src" "test"]
                         :compiler {:output-to "target/test.js"
                                    :source-map "target/test.js.map"
